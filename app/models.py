@@ -28,7 +28,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def vio_permision(self):
-        if eq(self.designation, "Manager") :
+        if self.designation == "Manager" :
             return True
         else:
             return False

@@ -50,6 +50,7 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        user.designation = form.designation.data
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
@@ -104,7 +105,7 @@ def raise_violation():
             flash('Violation Raised!!')
             return redirect(url_for('index'))
     else:
-        flash('You do not have permission to raise Violation, Sorry!!')
+        flash('You do not have permission to raise Violation, Sorry!!'+str(current_user.designation))
         return redirect(url_for('index'))
     return render_template('violation.html', title='Violation', form=form)
 

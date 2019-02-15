@@ -2,10 +2,12 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-
+  <div>
+    <h1>Your Violations:</h1>
+  </div>
     {% for vio in vios %}
-          {{ vio }}
-          <br/>
+           {% include '_vios.html' %}
+
     {% endfor %}
 
 {% endblock %}
