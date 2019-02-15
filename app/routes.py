@@ -92,15 +92,19 @@ def edit_profile():
 @app.route('/raise_violation', methods=['GET', 'POST'])
 @login_required
 def raise_violation():
-    form = ViolationForm()
-    if form.validate_on_submit():
-        vioRaised = Violation(violation_by=current_user.username,
-        violation_on=dict(form.violation_on.choices).get(form.violation_on.data),
-        violation=dict(form.violation.choices).get(form.violation.data) ,
-        remarks= form.remarks.data , violation_time= datetime.utcnow() )
-        db.session.add(vioRaised)
-        db.session.commit()
-        flash('Violation Raised!!')
+    if current_user.vio_permision():
+        form = ViolationForm()
+        if form.validate_on_submit():
+            vioRaised = Violation(violation_by=current_user.username,
+            violation_on=dict(form.violation_on.choices).get(form.violation_on.data),
+            violation=dict(form.violation.choices).get(form.violation.data) ,
+            remarks= form.remarks.data , violation_time= datetime.utcnow() )
+            db.session.add(vioRaised)
+            db.session.commit()
+            flash('Violation Raised!!')
+            return redirect(url_for('index'))
+    else:
+        flash('You do not have permission to raise Violation, Sorry!!')
         return redirect(url_for('index'))
     return render_template('violation.html', title='Violation', form=form)
 

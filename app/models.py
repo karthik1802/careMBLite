@@ -4,15 +4,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 from hashlib import md5
-
+from operator import eq
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    emp_id = db.Column(db.String(10))
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    designation = db.Column(db.String)
+    other = db.Column(db.String)
+    is_auth = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -22,6 +26,12 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def vio_permision(self):
+        if eq(self.designation, "Manager") :
+            return True
+        else:
+            return False
 
     @login.user_loader
     def load_user(id):
@@ -49,7 +59,7 @@ class Violation(db.Model):
     violation = db.Column(db.String(140))
     remarks = db.Column(db.String(140))
     violation_time = db.Column(db.DateTime, default=datetime.utcnow)
-    acknowledge = db.Column(db.Boolean)
+    acknowledge = db.Column(db.Boolean, default=False)
     remarks_vio = db.Column(db.String(140))
     acknowledge_time = db.Column(db.DateTime, default=datetime.utcnow)
 
