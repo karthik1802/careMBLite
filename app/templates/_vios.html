@@ -1,0 +1,18 @@
+<table class="table table-hover">
+        <tr>
+            <td width="70px">
+                <a href="{{ url_for('user', username=vio.violation_by) }}">
+                    <img src="{{ vio.violation_by.avatar(70) }}" />
+                </a>
+            </td>
+            <td>
+                <a href="#">
+                    {{ vio.violation_by }}
+                </a>
+                says:
+                <br>
+                {{ vio.violation }}
+            </td>
+        </tr>
+
+    </table>

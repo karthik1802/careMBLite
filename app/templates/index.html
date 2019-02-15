@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+    {% if current_user.is_anonymous %}
+    <h1>Hey, Stranger!</h1>
+    <p>Login to continue</p>
+    {%else%}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    <li><a href="{{url_for('raise_violation')}}">Raise Violation</a></li>
+    <li><a href="{{url_for('view_violations')}}">View Violations</a></li> 
+    {% endif %}
+{% endblock %}
