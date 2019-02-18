@@ -2,12 +2,25 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/mystyle.css') }}">
   <div>
+
     <h1>Your Violations:</h1>
   </div>
+    {%if vios[0].author %}
     {% for vio in vios %}
            {% include '_vios.html' %}
-
     {% endfor %}
+    {%else%}
+    <p><h3>No new violations</h3></p>
+    {%endif%}
+    <div>
+      <h1>Resolved Violations:</h1>
+    </div>
+    {% for vio in vios_res %}
+          {% include '_vios.html' %}
+    {% endfor %}
+
 
 {% endblock %}

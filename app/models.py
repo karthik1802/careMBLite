@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
     designation = db.Column(db.String)
     other = db.Column(db.String)
     is_auth = db.Column(db.Boolean, default=False)
-
+    vios = db.relationship('Violation', backref='author', lazy='dynamic')
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -43,19 +43,10 @@ class User(UserMixin, db.Model):
             digest, size)
 
 
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __repr__(self):
-        return '<Post {}>'.format(self.body)
-
 class Violation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     violation_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-    violation_on = db.Column(db.Integer, db.ForeignKey('user.id'))
+    violation_on = db.Column(db.String(15))
     violation = db.Column(db.String(140))
     remarks = db.Column(db.String(140))
     violation_time = db.Column(db.DateTime, default=datetime.utcnow)

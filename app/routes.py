@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ViolationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ViolationForm, ViolationAcknowledge
 from app.models import User, Violation
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import request
@@ -96,10 +96,10 @@ def raise_violation():
     if current_user.vio_permision():
         form = ViolationForm()
         if form.validate_on_submit():
-            vioRaised = Violation(violation_by=current_user.username,
-            violation_on=dict(form.violation_on.choices).get(form.violation_on.data),
+            vioRaised = Violation(violation_on=dict(form.violation_on.choices).get(form.violation_on.data),
             violation=dict(form.violation.choices).get(form.violation.data) ,
             remarks= form.remarks.data , violation_time= datetime.utcnow() )
+            current_user.vios.append(vioRaised)
             db.session.add(vioRaised)
             db.session.commit()
             flash('Violation Raised!!')
@@ -112,6 +112,27 @@ def raise_violation():
 @app.route('/view_violations')
 @login_required
 def view_violations():
-    vios = [(a.id, a.violation) for a in Violation.query.filter_by(violation_on = current_user.username)]
-    list = []
-    return render_template('view_violations.html',user=user, vios=vios)
+    vios = Violation.query.filter_by(violation_on =
+    current_user.username, acknowledge = False).order_by(Violation.violation_time.desc())
+    vios_res = Violation.query.filter_by(violation_on =
+    current_user.username, acknowledge = True).order_by(Violation.violation_time.desc())
+    return render_template('view_violations.html',user=user, vios=vios, vios_res=vios_res )
+
+@app.route('/acknowledge_violation/<violation_id>', methods=['GET', 'POST'])
+@login_required
+def acknowledge_violation(violation_id):
+    #check username of violation
+    violation = Violation.query.filter_by(id = violation_id).first()
+    form = ViolationAcknowledge()
+    if current_user.username == violation.violation_on:
+        if form.validate_on_submit():
+            violation.acknowledge = True
+            violation.acknowledge_time = datetime.utcnow()
+            violation.remarks_vio = form.remarks_vio.data
+            db.session.commit()
+            flash('Acknowledged, (some stuff about maintaining decorum)')
+            return redirect(url_for('view_violations'))
+        return render_template('acknowledge_violation.html', violation=violation, form=form)
+    else:
+        flash("Don't try to act smart")
+        return redirect(url_for('view_violations'))

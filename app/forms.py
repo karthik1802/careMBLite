@@ -44,7 +44,6 @@ class ViolationForm(FlaskForm):
         self.violation_on.choices = [(a.id, a.username) for a in User.query.order_by(User.id)]
         self.violation.choices = [(a.id, a.violation) for a in ViolationList.query.order_by(ViolationList.id)]
 
-
 class ViolationAcknowledge(FlaskForm):
     remarks_vio = TextAreaField('Remarks', validators=[Length(min=0, max=140)])
     submit = SubmitField('Acknowledge')
