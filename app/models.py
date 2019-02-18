@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     other = db.Column(db.String)
     is_auth = db.Column(db.Boolean, default=False)
     vios = db.relationship('Violation', backref='author', lazy='dynamic')
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -29,7 +30,7 @@ class User(UserMixin, db.Model):
 
     def vio_permision(self):
         if self.designation == "Manager" :
-            return True
+            return True                         
         else:
             return False
 

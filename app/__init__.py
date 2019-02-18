@@ -17,13 +17,14 @@ app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 
 admin = Admin(app, name='microblog', template_mode='bootstrap3')
 # Add administrative views here
-app.config.from_object(Config)
-db = SQLAlchemy(app)
+app.config.from_object(Config)    ##Refer config.py for Configuration Settings
+db = SQLAlchemy(app)              ## Initialising new DB
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 bootstrap = Bootstrap(app)
 
+# # DEBUG and Error Handling
 
 if not app.debug:
     if app.config['MAIL_SERVER']:

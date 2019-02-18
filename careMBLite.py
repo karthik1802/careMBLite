@@ -10,3 +10,6 @@ if __name__ == '__main__':
     app.run()
 
 ####### SET UP MAIL SERVER #########
+### MAKE ADMIN PANNEL ###
+#### UNIT TESTING #####
+#### JOIN IN SQLAlchemy #####
