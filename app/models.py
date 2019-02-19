@@ -18,7 +18,6 @@ class User(UserMixin, db.Model):
     other = db.Column(db.String)
     is_auth = db.Column(db.Boolean, default=False)
     vios = db.relationship('Violation', backref='author', lazy='dynamic')
-
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -30,7 +29,7 @@ class User(UserMixin, db.Model):
 
     def vio_permision(self):
         if self.designation == "Manager" :
-            return True                         
+            return True
         else:
             return False
 
@@ -48,7 +47,7 @@ class Violation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     violation_by = db.Column(db.Integer, db.ForeignKey('user.id'))
     violation_on = db.Column(db.String(15))
-    violation = db.Column(db.String(140))
+    violation = db.Column(db.Integer, db.ForeignKey('violation_list.id'))
     remarks = db.Column(db.String(140))
     violation_time = db.Column(db.DateTime, default=datetime.utcnow)
     acknowledge = db.Column(db.Boolean, default=False)
@@ -62,6 +61,6 @@ class Violation(db.Model):
 class ViolationList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     violation = db.Column(db.String(140))
-
+    violist = db.relationship('Violation', backref='vio', lazy='dynamic')
     def __repr__(self):
         return '<Violations {}>'.format(self.violation)

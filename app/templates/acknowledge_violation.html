@@ -16,16 +16,34 @@
                 </a>
                 Noticed:
                 <br>
-                {{ violation.violation }}
+                {{ violation.vio.violation }}
                 <br>
-
+                Remarks : {% if violation.remarks_vio %} {{violation.remarks}} {%else%} None {%endif%}
+                <br>
+                Time : {{ violation.violation_time }}
             </td>
+            {%if violation.acknowledge %}
+            <td>
+              Employee Remarks : {% if violation.remarks_vio%} {{violation.remarks_vio}} {%else%} None {%endif%}<br>
+              Acknowledge Time : {{violation.acknowledge_time}}<br>
+              Status : Acknowledged<br>
+              <br>
+            </td>
+            {%elif current_user.vio_permision() %}
+            <td>
+              Status : Not Acknowledged
+              <br>
+            </td>
+            {% else %}
         </tr>
 
     </table>
+
+
     <div class="row">
         <div class="col-md-4">
             {{ wtf.quick_form(form) }}
         </div>
     </div>
+    {%endif%}
 {% endblock %}

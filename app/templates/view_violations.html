@@ -6,17 +6,18 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/mystyle.css') }}">
   <div>
 
-    <h1>Your Violations:</h1>
+    <h1>{%if current_user.username != username%} {{username}}'s {%else%}Your{%endif%} Violations:</h1>
   </div>
-    {%if vios[0].author %}
+    {%if vios.first()%}
     {% for vio in vios %}
            {% include '_vios.html' %}
     {% endfor %}
     {%else%}
-    <p><h3>No new violations</h3></p>
+    <p> <h3> No new violations</h3>
+    </p>
     {%endif%}
     <div>
-      <h1>Resolved Violations:</h1>
+      <h1>{%if current_user.username != username%} {{username}}'s {%endif%}Resolved Violations:</h1>
     </div>
     {% for vio in vios_res %}
           {% include '_vios.html' %}

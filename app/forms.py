@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import User, Violation, ViolationList
 
-## All forms quite self explanatory
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -41,9 +41,16 @@ class ViolationForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(ViolationForm, self).__init__(*args, **kwargs)
-        self.violation_on.choices = [(a.id, a.username) for a in User.query.order_by(User.id)]
+        self.violation_on.choices = [(a.id, a.username) for a in User.query.filter_by(is_auth = True).order_by(User.id)]
         self.violation.choices = [(a.id, a.violation) for a in ViolationList.query.order_by(ViolationList.id)]
 
 class ViolationAcknowledge(FlaskForm):
     remarks_vio = TextAreaField('Remarks', validators=[Length(min=0, max=140)])
     submit = SubmitField('Acknowledge')
+
+class ViewViolationManager(FlaskForm):
+    user = SelectField('Select Employee',coerce = int, validators=[DataRequired()])
+    submit = SubmitField('Submit')
+    def __init__(self, *args, **kwargs):
+        super(ViewViolationManager, self).__init__(*args, **kwargs)
+        self.user.choices = [(a.id, a.username) for a in User.query.order_by(User.id)]
