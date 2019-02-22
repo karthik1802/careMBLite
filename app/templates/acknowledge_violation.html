@@ -27,12 +27,20 @@
               Employee Remarks : {% if violation.remarks_vio%} {{violation.remarks_vio}} {%else%} None {%endif%}<br>
               Acknowledge Time : {{violation.acknowledge_time}}<br>
               Status : Acknowledged<br>
+              {%if current_user.vio_permision() %}
+              <div class="row">
+                  <div class="col-md-4">
+                      {{ wtf.quick_form(form_1) }}
+                  </div>
+              </div>
+              {%endif%}
               <br>
             </td>
             {%elif current_user.vio_permision() %}
             <td>
               Status : Not Acknowledged
               <br>
+              Please Tag the violation after acknowledgement
             </td>
             {% else %}
         </tr>
@@ -42,7 +50,7 @@
 
     <div class="row">
         <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
+            {{ wtf.quick_form(form_0) }}
         </div>
     </div>
     {%endif%}

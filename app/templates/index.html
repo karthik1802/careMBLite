@@ -8,6 +8,7 @@
     <p>Login to continue</p>
     {%else%}
     <h1>Hi, {{ current_user.username }}!</h1>
+    <li><a href = "{{url_for('admin.index')}}">admin</a></li>
     <li><a href="{{url_for('raise_violation')}}">Raise Violation</a></li>
     <li><a href="{{url_for('view_violations', username = current_user.username)}}">View Violations</a></li>
     {%if current_user.vio_permision() %}<li><a href="{{url_for('emp_violation')}}">Emplpyee Specific Violation</a></li>{%endif%}
