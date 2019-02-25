@@ -6,13 +6,13 @@
 <table class="table table-hover">
         <tr>
             <td width="70px">
-                <a href="{{ url_for('user', username = violation.author.username) }}">
-                    <img src="{{ violation.author.avatar(70) }}" />
+                <a href="{{ url_for('main.user', username = violation.vio_raised.username) }}">
+                    <img src="{{ violation.vio_raised.avatar(70) }}" />
                 </a>
             </td>
             <td>
-                <a href="{{ url_for('user', username = violation.author.username) }}">
-                    {{violation.author.username}}
+                <a href="{{ url_for('main.user', username = violation.vio_raised.username) }}">
+                    {{violation.vio_raised.username}}
                 </a>
                 Noticed:
                 <br>

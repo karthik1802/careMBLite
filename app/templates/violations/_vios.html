@@ -1,0 +1,30 @@
+{% if vio.vio_raised %}
+<table class="table table-hover">
+        <tr>
+            <td width="70px">
+                    <img src="{{ vio.vio_raised.avatar(70) }}" />
+                    <a href="{{ url_for('main.user', username=vio.vio_raised.username) }}">
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('main.user', username=vio.vio_raised.username) }}">
+                  {{vio.vio_raised.username}}
+                </a>
+                <br>
+                Noticed a Vio
+                <br>
+                 at {{ vio.violation_time }}
+                <br>
+                {%if vio.acknowledge %}
+                Status : Closed <a href="{{url_for('violations.acknowledge_violation', violation_id = vio.id)}}">View Details</a>
+                {% elif current_user.vio_permision() %}
+                <a href="{{url_for('violations.acknowledge_violation', violation_id = vio.id)}}">View Details</a>
+                {%else%}
+                <a href="{{url_for('violations.acknowledge_violation', violation_id = vio.id)}}">View More</a>
+                <br>
+                {%endif%}
+            </td>
+        </tr>
+
+    </table>
+{%endif%}
