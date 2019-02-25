@@ -1,4 +1,4 @@
-from app import app, db
+from app import create_app, db
 from flask import flash,redirect,url_for
 from flask_admin.contrib.sqla import ModelView
 from app.models import User, Violation, ViolationList, SeverityList, Tag
@@ -10,11 +10,11 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 from flask_security.utils import encrypt_password
 
 #Flask Shell
+app = create_app()
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Post': Post}
-
+    return {'db': db, 'User': User}
 #Admin view + Flask Security
 
 class MyModelView(sqla.ModelView):
