@@ -1,14 +1,15 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ViolationForm, ViolationAcknowledge
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ViolationForm,\
+    ViolationAcknowledge, ViolationTaggingForm
 from app.forms import ViewViolationManager
-from app.models import User, Violation, ViolationList
+from app.models import User, Violation, ViolationList, Tag
 from flask_login import current_user, login_user, logout_user, login_required
 from flask import request
 from werkzeug.urls import url_parse
 from app import db
 from datetime import datetime
-
+from app.analytics import *
 
 @app.route('/')
 @app.route('/index')
@@ -16,23 +17,18 @@ def index():
     return render_template('index.html', title = 'Home')
 
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-
-
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
-
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
@@ -68,11 +64,13 @@ def user(username):
     ]
     return render_template('user.html', user=user, posts=posts)
 
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -114,30 +112,38 @@ def raise_violation():
 @app.route('/view_violations/<username>')
 @login_required
 def view_violations(username):
-    vios = Violation.query.filter_by(violation_on =
-    username, acknowledge = False).order_by(Violation.violation_time.desc())
-    vios_res = Violation.query.filter_by(violation_on =
-    username, acknowledge = True).order_by(Violation.violation_time.desc())
-    return render_template('view_violations.html',username=username, vios=vios, vios_res=vios_res )
+    return render_template('view_violations.html',username=username, vios=UserAnalytics.myViolations(username, acknowledge=True),
+    vios_res=UserAnalytics.myViolations(username, acknowledge = False) )
+
 
 @app.route('/acknowledge_violation/<violation_id>', methods=['GET', 'POST'])
 @login_required
 def acknowledge_violation(violation_id):
     #check username of violation
     violation = Violation.query.filter_by(id = violation_id).first()
-    form = ViolationAcknowledge()
+    form_0 = ViolationAcknowledge(prefix="form_0")
+    form_1 = ViolationTaggingForm(prefix="form_1")
     if current_user.username == violation.violation_on or current_user.vio_permision():
-        if form.validate_on_submit():
+        if form_1.validate_on_submit():
+            for a in form_1.tags.data:
+                tagg = Tag.query.filter_by(id=a).first_or_404()
+                violation.tags.append(tagg)
+                db.session.commit()
+            flash('Violation has been tagged')
+            return redirect(url_for('view_violations', username = current_user.username))
+        if form_0.validate_on_submit():
             violation.acknowledge = True
             violation.acknowledge_time = datetime.utcnow()
-            violation.remarks_vio = form.remarks_vio.data
+            violation.remarks_vio = form_0.remarks_vio.data
             db.session.commit()
-            flash('Acknowledged, (some stuff about maintaining decorum)')
+            flash('Acknowledged, Your response has been marked')
             return redirect(url_for('view_violations', username = current_user.username))
-        return render_template('acknowledge_violation.html', violation=violation, form=form)
+
+        return render_template('acknowledge_violation.html', violation=violation, form_0=form_0, form_1=form_1)
     else:
         flash("Don't try to act smart")
         return redirect(url_for('view_violations', username = current_user.username))
+
 
 @app.route('/emp_violation', methods=['GET', 'POST'])
 @login_required

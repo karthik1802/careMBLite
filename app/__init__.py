@@ -9,14 +9,9 @@ from logging.handlers import RotatingFileHandler
 from flask_bootstrap import Bootstrap
 import os
 
-
-
 app = Flask(__name__)
-# set optional bootswatch theme
-app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 
-
-
+#Initialisations
 
 app.config.from_object(Config)
 db = SQLAlchemy(app)
@@ -41,7 +36,7 @@ if not app.debug:
             credentials=auth, secure=secure)
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
-
+    #Logging
     if not os.path.exists('logs'):
         os.mkdir('logs')
     file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=10240,
@@ -50,7 +45,6 @@ if not app.debug:
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
-
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
 
