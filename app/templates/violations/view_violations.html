@@ -10,7 +10,7 @@
   </div>
     {%if vios.first()%}
     {% for vio in vios %}
-           {% include '_vios.html' %}
+           {% include 'violations/_vios.html' %}
     {% endfor %}
     {%else%}
     <p> <h3> No new violations</h3>
@@ -20,7 +20,7 @@
       <h1>{%if current_user.username != username%} {{username}}'s {%endif%}Resolved Violations:</h1>
     </div>
     {% for vio in vios_res %}
-          {% include '_vios.html' %}
+          {% include 'violations/_vios.html' %}
     {% endfor %}
 
 

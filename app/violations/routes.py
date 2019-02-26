@@ -7,7 +7,7 @@ from app import db
 from app.violations.forms import ViolationForm, ViewViolationManager, ViolationAcknowledge,\
     ViolationTaggingForm
 from app.models import User, Violation, ViolationList, Tag
-from app.analytics import *
+from app.analytics import UserAnalytics
 from app.violations import bp
 
 
@@ -38,8 +38,8 @@ def raise_violation():
 @bp.route('/view_violations/<username>')
 @login_required
 def view_violations(username):
-    return render_template('violations/view_violations.html',username=username, vios=UserAnalytics.myViolations(username, acknowledge=True),
-    vios_res=UserAnalytics.myViolations(username, acknowledge = False) )
+    return render_template('violations/view_violations.html',username=username, vios=UserAnalytics.myViolations(username, acknowledge=False),
+    vios_res=UserAnalytics.myViolations(username, acknowledge = True) )
 
 
 @bp.route('/acknowledge_violation/<violation_id>', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def acknowledge_violation(violation_id):
                 violation.tags.append(tagg)
                 db.session.commit()
             flash('Violation has been tagged')
-            return redirect(url_for('violations.view_violations', username = current_user.username))
+            return redirect(url_for('violations.view_violations', username = violation.vio_received.username))
         if form_0.validate_on_submit():
             violation.acknowledge = True
             violation.acknowledge_time = datetime.utcnow()

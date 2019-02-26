@@ -3,7 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    DEBUG = 1
+    DEBUG = True
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECERET_KEY' , 'you-will-nevr-guess')
