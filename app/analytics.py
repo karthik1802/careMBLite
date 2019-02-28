@@ -1,5 +1,7 @@
 from app.models import User, Violation
 from flask_login import current_user
+
+
 class UserAnalytics(object):
 
     def myViolations(username, **kwargs):

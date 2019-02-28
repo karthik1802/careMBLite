@@ -47,9 +47,12 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     teamMembers = db.relationship('User',
                 backref=db.backref('manager', remote_side=[id])
             )
-    #vioReceived = db.relationship('Violation', backref=db.backref('vioRaised', remote_side=[id]))
-    vio_received = db.relationship('Violation', backref = 'vio_received', lazy = 'dynamic', foreign_keys = 'Violation.violation_on')
-    vio_raised = db.relationship('Violation', backref = 'vio_raised', lazy = 'dynamic', foreign_keys = 'Violation.violation_by')
+    #vioReceived = db.relationship('Violation', backref=db.backref('vioRaised',\
+    #remote_side=[id]))
+    vio_received = db.relationship('Violation', backref = 'vio_received', \
+    lazy = 'dynamic', foreign_keys = 'Violation.violation_on')
+    vio_raised = db.relationship('Violation', backref = 'vio_raised', \
+    lazy = 'dynamic', foreign_keys = 'Violation.violation_by')
     def __repr__(self):
         return format(self.username)
 
