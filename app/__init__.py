@@ -47,6 +47,9 @@ def create_app(config_class=Config):
     from app.violations import bp as violations_bp
     app.register_blueprint(violations_bp)
 
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
+
     ## # DEBUG and Error Handling
     if not app.debug:
         if app.config['MAIL_SERVER']:
