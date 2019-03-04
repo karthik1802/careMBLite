@@ -20,7 +20,6 @@ def get_users():
     return jsonify(data)
 
 @bp.route('/users', methods=['POST'])
-def create_user():
     data = request.get_json() or {}
     if 'username' not in data or 'email' not in data or 'password' not in data:
         return bad_request('must include username, email and password fields')
