@@ -3,7 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    DEBUG = True
+    DEBUG = 1
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECERET_KEY' , 'you-will-nevr-guess')
@@ -16,7 +16,7 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['akay1802@gmail.com']
-
+    # FLASK_ENV=development
 
 
 class ProductionConfig(Config):

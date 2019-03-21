@@ -38,8 +38,8 @@ def raise_violation():
 @bp.route('/view_violations/<username>')
 @login_required
 def view_violations(username):
-    return render_template('violations/view_violations.html',username=username, vios=UserAnalytics.myViolations(username, acknowledge=False),
-    vios_res=UserAnalytics.myViolations(username, acknowledge = True) )
+    return render_template('violations/view_violations.html',username=username, vios=UserAnalytics.userTagViolations(username, acknowledge=False),
+    vios_res=UserAnalytics.userTagViolations(username, acknowledge = True) )
 
 
 @bp.route('/acknowledge_violation/<violation_id>', methods=['GET', 'POST'])
