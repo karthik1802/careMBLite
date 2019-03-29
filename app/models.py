@@ -33,6 +33,8 @@ class PaginatedAPIMixin(object):
         }
         return data
 
+
+
 class User(PaginatedAPIMixin, UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -173,3 +175,32 @@ class ViolationList(db.Model):
     violist = db.relationship('Violation', backref='vio', lazy='dynamic')
     def __repr__(self):
         return '<Violations {}>'.format(self.violation)
+
+class Status(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(15))
+    description = db.Column(db.String(75))
+    def __repr__(self):
+        return 'Status {}'.format(self.violation)
+
+class Department(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(15))
+    description = db.Column(db.String(75))
+    def __repr__(self):
+        return 'Department {}'.format(self.violation)
+
+
+
+class Request(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    asked_at = db.Column(db.DateTime, default = datetime.utcnow)
+    asked_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    department = db.Column(db.Integer, db.ForeignKey('department.id'))
+    summary = db.Column(db.String(52))
+    description = db.Column(db.String(100))
+    status = db.Column(db.Integer, db.ForeignKey('status.id'))
+    is_individual = db.Column(db.Boolean, default = False)
+    solvedAt = db.Column(db.DateTime, default = datetime.utcnow)
+    def __repr__(self):
+        return 'Request ID {}'.format(self.violation)

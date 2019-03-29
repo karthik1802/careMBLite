@@ -47,6 +47,9 @@ def create_app(config_class=Config):
     from app.violations import bp as violations_bp
     app.register_blueprint(violations_bp)
 
+    from app.service_request import bp as service_request_bp
+    app.register_blueprint(service_request_bp)
+
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 

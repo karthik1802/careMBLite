@@ -1,10 +1,9 @@
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms.validators import ValidationError, DataRequired, Length, \
-    Email, EqualTo, Length
+    Email, EqualTo
 from flask_babel import _, lazy_gettext as _l
 from app.models import User, Violation, ViolationList, Tag
-from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField,\
     SubmitField, TextAreaField, SelectField, SelectMultipleField, \
     widgets
