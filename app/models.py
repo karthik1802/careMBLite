@@ -181,14 +181,14 @@ class Status(db.Model):
     name = db.Column(db.String(15))
     description = db.Column(db.String(75))
     def __repr__(self):
-        return 'Status {}'.format(self.violation)
+        return 'Status {}'.format(self.name)
 
 class Department(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(15))
     description = db.Column(db.String(75))
     def __repr__(self):
-        return 'Department {}'.format(self.violation)
+        return 'Department {}'.format(self.name)
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -201,12 +201,23 @@ class Request(db.Model):
     is_individual = db.Column(db.Boolean, default = False)
     solvedAt = db.Column(db.DateTime, default = datetime.utcnow)
     def __repr__(self):
-        return 'Request ID {}'.format(self.violation)
+        return 'Request ID {}'.format(self.id)
 
 class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     request_id = db.Column(db.Integer, db.ForeignKey('request.id'))
     assigned_at = db.Column(db.DateTime, default = datetime.utcnow)
     assigned_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-    assigned to = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
     time_to_solve = db.Column(db.DateTime, default = datetime.utcnow)
+    def __repr__(self):
+        return 'Assignment ID {}'.format(self.id)
+
+class PredefinedRequests(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
+    summary = db.Column(db.String(52))
+    description = db.Column(db.String(100))
+    is_individual = db.Column(db.Boolean, default = False )
+    def __repr__(self):
+        return 'PreRequest ID {}'.format(self.id)
