@@ -190,8 +190,6 @@ class Department(db.Model):
     def __repr__(self):
         return 'Department {}'.format(self.violation)
 
-
-
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     asked_at = db.Column(db.DateTime, default = datetime.utcnow)
@@ -204,3 +202,11 @@ class Request(db.Model):
     solvedAt = db.Column(db.DateTime, default = datetime.utcnow)
     def __repr__(self):
         return 'Request ID {}'.format(self.violation)
+
+class Assignment(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    request_id = db.Column(db.Integer, db.ForeignKey('request.id'))
+    assigned_at = db.Column(db.DateTime, default = datetime.utcnow)
+    assigned_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assigned to = db.Column(db.Integer, db.ForeignKey('user.id'))
+    time_to_solve = db.Column(db.DateTime, default = datetime.utcnow)
