@@ -6,6 +6,7 @@ from app import db
 from app.service_request.forms import CreateRequestForm
 from app.service_request import bp
 from app.models import Request
+
 @bp.route('/create_request', methods = ['GET', 'POST'])
 @login_required
 def create_request():

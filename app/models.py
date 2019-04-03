@@ -200,10 +200,12 @@ class Request(db.Model):
     status = db.Column(db.Integer, db.ForeignKey('status.id'))
     is_individual = db.Column(db.Boolean, default = False)
     assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assigned_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assigned_at = db.Column(db.DateTime, default = datetime.utcnow)
     solvedAt = db.Column(db.DateTime, default = datetime.utcnow)
     def __repr__(self):
         return 'Request ID {}'.format(self.id)
-
+## replace assignment table with something appropriate to track changes
 class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     request_id = db.Column(db.Integer, db.ForeignKey('request.id'))
