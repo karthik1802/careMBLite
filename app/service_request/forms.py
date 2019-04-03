@@ -18,7 +18,9 @@ class CreateRequestForm(FlaskForm):
     summary = TextAreaField('Summary', validators = [Length(min=0, max=140)])
     description = TextAreaField('Description', validators = [Length(min=0, max=140)])
     submit = SubmitField('Submit')
+    suggest_individual = MultiCheckboxField('', coerce = int)
 
     def __init__(self, *args, **kwargs):
         super(CreateRequestForm, self).__init__(*args, **kwargs)
-        self.department.choices = [(a.id, a.username) for a in Department.query.order_by(Department.id)]
+        self.department.choices = [(a.id, a.name) for a in Department.query.order_by(Department.id)]
+        self.suggest_individual.choices = [(a.id, a.username) for a in User.query.order_by(user.id)]

@@ -199,6 +199,7 @@ class Request(db.Model):
     description = db.Column(db.String(100))
     status = db.Column(db.Integer, db.ForeignKey('status.id'))
     is_individual = db.Column(db.Boolean, default = False)
+    assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
     solvedAt = db.Column(db.DateTime, default = datetime.utcnow)
     def __repr__(self):
         return 'Request ID {}'.format(self.id)
